@@ -9,7 +9,8 @@ const ISM_E_ZAAT_MUBARAK = () => {
   const [state, setState] = useState(true);
   const [fast, setFast] = useState(2400);
   const [isConstant, setIsConstant] = useState(false);
-  const [isDisplay, setIsDisplay] = useState("block")
+  const [isDisplay, setIsDisplay] = useState("block");
+  const [gradient, setGradient] = useState(0)
   const { x } = useSpring({
     from: { x: 0 },
     x: state ? 1 : 0,
@@ -17,6 +18,22 @@ const ISM_E_ZAAT_MUBARAK = () => {
     loop: true,
     immediate: isConstant === "false" ? true : false,
   });
+
+  const gradientHandler = (number) => {
+    if (gradient > -55 && gradient < 75) {
+      return setGradient(gradient => gradient + number)
+    }
+    else if (gradient < -55 && gradient < 75) {
+      return setGradient(-54)
+    } 
+    else if (gradient > -55 && gradient > 75){
+      return setGradient(74)
+    }
+  }
+
+  const showPageContent = () =>{
+    document.getElementById("rest-of-page").style.display = "block"
+  }
 
   return (
     <>
@@ -26,21 +43,21 @@ const ISM_E_ZAAT_MUBARAK = () => {
         </title>
         <meta name="ISM E ALLAH ZAAT" content="ISM E ALLAH ZAAT" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon-32x32.png" />
+        <link rel="icon" href="/sultan-bahoo-darbar.ico" />
       </Head>
       <div className={styles.container}>
-        <div className={styles.container_gradient}></div>
+        <div className={styles.container_gradient} style={{backgroundImage: `linear-gradient(180deg, 	hsl(281, 76%, ${25+gradient}%) 25%, 	hsl(249, 78%, ${25+gradient}%) 63%)`}}></div>
         <div className={styles.border}>
           <div className={styles.inner_border}>
-            <div className={styles.inner_border_gradient_box} style={{}}></div>
             <Image
               src="/ISM_E_ZAAT.png"
               fill
               style={{ objectFit: "contain" }}
               alt=""
               priority
-              
+              onLoad={showPageContent}
             />
+            <div className={styles.inner_border_gradient_box} id="rest-of-page" style={{display:"none",backgroundImage: `linear-gradient(0deg, hsl(230, 60%, ${55+gradient}%) 0%, hsl(304, 52%, ${55+gradient}%) 46%, 	hsl(39, 100%, ${55+gradient}%) 100%)`}}></div>
             <div className={styles.SUNEHRI_JALIAN_MUBARAK}>
               <Image
                 src="/SUNEHRI_JALIAN_MUBARAK.jpg"
@@ -121,6 +138,12 @@ const ISM_E_ZAAT_MUBARAK = () => {
           }
         >
           {isConstant === "false" ? "continue" : "constant"}
+        </button>
+        <button  className={styles.button} style={{display:isDisplay}} onClick={() => gradientHandler(+10)}>
+          bright
+        </button>
+        <button  className={styles.button} style={{display:isDisplay}} onClick={() => gradientHandler(-10)}>
+          dark
         </button>
       </div>
     </>
